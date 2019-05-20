@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+import Checkbox from "./components/Checkbox";
+
 import useInputText from "./useInputText";
 import useSelect from "./useSelect";
 
 import "./styles.css";
+import useMasterSlave from "./useMasterSlave";
 
 const initialOptions = [
   { label: "1", value: "1" },
@@ -18,6 +21,23 @@ function App() {
 
   const [inputVal, InputText] = useInputText("initial");
   const [valSelected, Select] = useSelect(options, "3");
+
+  const [masterToggle, slaveToggle] = useMasterSlave({
+    propSlave: "disabled"
+  });
+
+  const [masterReverse, slaveReverse] = useMasterSlave(
+    {
+      propSlave: "value",
+      defaultProp: "defaultValue",
+      defaultValue: "Default"
+    },
+    e =>
+      e.target.value
+        .split("")
+        .reverse()
+        .join("")
+  );
 
   return (
     <div className="App">
@@ -33,6 +53,15 @@ function App() {
       </button>
       <h1>{`Selected: ${valSelected}`}</h1>
       <Select />
+      <br />
+      <h2>Master-Slave with checkbox</h2>
+      <Checkbox {...masterToggle} />
+      <input type="text" {...slaveToggle} />
+      <br />
+      <h2>Master-Slave with 2 Input Text</h2>
+      <input type="text" {...masterReverse} />
+      <br />
+      <input type="text" {...slaveReverse} />
     </div>
   );
 }
